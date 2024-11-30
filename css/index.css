@@ -1,6 +1,6 @@
 body {
-    background-color: #121212; /* Dark background for a mysterious feel */
-    color: #f0f0f0; /* Light text for contrast */
+    background-color: #2D2D2D; 
+    color: #f0f0f0; 
     font-family: 'Georgia', serif;
     text-align: center;
     margin-top: 15%;
@@ -21,7 +21,7 @@ h1 {
 }
 
 button {
-    background-color: #4a148c;
+    background-color: #1A1A40;
     color: #fff;
     border: none;
     padding: 15px 30px;
