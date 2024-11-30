@@ -1,9 +1,9 @@
-// Import the functions you need from the SDKs you need
+// Import the necessary Firebase modules
 import { initializeApp } from "firebase/app";
 import { getAnalytics } from "firebase/analytics";
-import { getAuth, signInWithEmailAndPassword, createUserWithEmailAndPassword, GoogleAuthProvider, signInWithPopup } from "firebase/auth";
+import { getAuth, signInWithEmailAndPassword, createUserWithEmailAndPassword, GoogleAuthProvider, signInWithPopup, sendPasswordResetEmail } from "firebase/auth";
 
-// Your web app's Firebase configuration
+// Firebase configuration object
 const firebaseConfig = {
   apiKey: "AIzaSyC7P1txKNJdO5WF0mw6e0st4gx24W68SEk",
   authDomain: "timecapsule-5df93.firebaseapp.com",
@@ -14,98 +14,114 @@ const firebaseConfig = {
   measurementId: "G-YEFXC4EGPK"
 };
 
-// Initialize Firebase
+// Initialize Firebase app and services
 const app = initializeApp(firebaseConfig);
 const analytics = getAnalytics(app);
-
-// Initialize Firebase Authentication
 const auth = getAuth(app);
 
 // Get the form elements
 const loginForm = document.getElementById("loginForm");
 const signupForm = document.getElementById("signupForm");
+const forgotPasswordForm = document.getElementById("forgotPasswordForm");
 const emailInput = document.getElementById("email");
 const passwordInput = document.getElementById("password");
 
 // Google Auth Provider
 const googleProvider = new GoogleAuthProvider();
 
-// Login Form Submission
-if (loginForm) {
-    loginForm.addEventListener("submit", (e) => {
-        e.preventDefault();
-
-        const email = emailInput.value;
-        const password = passwordInput.value;
-
-        signInWithEmailAndPassword(auth, email, password)
-            .then((userCredential) => {
-                // User successfully logged in
-                window.location.href = "../pages/capsule.html"; // Redirect to capsule.html
-            })
-            .catch((error) => {
-                // Handle errors
-                const errorCode = error.code;
-                const errorMessage = error.message;
-                alert("Error: " + errorMessage);
-            });
-    });
+// Helper function to redirect after successful login/signup
+function redirectToCapsule() {
+  window.location.href = "../pages/capsule.html"; // Redirect to the capsule page
 }
 
-// Google Login Button Click
+// Login form submission
+if (loginForm) {
+  loginForm.addEventListener("submit", (e) => {
+    e.preventDefault();
+
+    const email = emailInput.value;
+    const password = passwordInput.value;
+
+    signInWithEmailAndPassword(auth, email, password)
+      .then(() => {
+        // Successfully logged in
+        redirectToCapsule();
+      })
+      .catch((error) => {
+        // Handle login errors
+        alert("Error: " + error.message);
+      });
+  });
+}
+
+// Google Login button click
 const googleLoginButton = document.getElementById("googleLoginButton");
 if (googleLoginButton) {
-    googleLoginButton.addEventListener("click", (e) => {
-        signInWithPopup(auth, googleProvider)
-            .then((result) => {
-                // User successfully signed in with Google
-                window.location.href = "../pages/capsule.html"; // Redirect to capsule.html
-            })
-            .catch((error) => {
-                // Handle errors
-                const errorCode = error.code;
-                const errorMessage = error.message;
-                alert("Error: " + errorMessage);
-            });
-    });
+  googleLoginButton.addEventListener("click", () => {
+    signInWithPopup(auth, googleProvider)
+      .then(() => {
+        // Successfully logged in with Google
+        redirectToCapsule();
+      })
+      .catch((error) => {
+        // Handle errors
+        alert("Error: " + error.message);
+      });
+  });
 }
 
-// Google Sign-Up Button Click (added for sign-up functionality)
+// Google Sign-Up button click
 const googleSignupButton = document.getElementById("googleSignupButton");
 if (googleSignupButton) {
-    googleSignupButton.addEventListener("click", (e) => {
-        signInWithPopup(auth, googleProvider)
-            .then((result) => {
-                // User successfully signed up with Google
-                window.location.href = "../pages/capsule.html"; // Redirect to capsule.html
-            })
-            .catch((error) => {
-                // Handle errors
-                const errorCode = error.code;
-                const errorMessage = error.message;
-                alert("Error: " + errorMessage);
-            });
-    });
+  googleSignupButton.addEventListener("click", () => {
+    signInWithPopup(auth, googleProvider)
+      .then(() => {
+        // Successfully signed up with Google
+        redirectToCapsule();
+      })
+      .catch((error) => {
+        // Handle errors
+        alert("Error: " + error.message);
+      });
+  });
 }
 
-// Sign Up Form Submission (same as before)
+// Sign Up form submission
 if (signupForm) {
-    signupForm.addEventListener("submit", (e) => {
-        e.preventDefault();
+  signupForm.addEventListener("submit", (e) => {
+    e.preventDefault();
 
-        const email = emailInput.value;
-        const password = passwordInput.value;
+    const email = emailInput.value;
+    const password = passwordInput.value;
 
-        createUserWithEmailAndPassword(auth, email, password)
-            .then((userCredential) => {
-                // User successfully signed up
-                window.location.href = "../pages/capsule.html"; // Redirect to capsule.html
-            })
-            .catch((error) => {
-                // Handle errors
-                const errorCode = error.code;
-                const errorMessage = error.message;
-                alert("Error: " + errorMessage);
-            });
-    });
+    createUserWithEmailAndPassword(auth, email, password)
+      .then(() => {
+        // Successfully signed up
+        redirectToCapsule();
+      })
+      .catch((error) => {
+        // Handle signup errors
+        alert("Error: " + error.message);
+      });
+  });
+}
+
+// Forgot Password form submission
+if (forgotPasswordForm) {
+  forgotPasswordForm.addEventListener("submit", (e) => {
+    e.preventDefault();
+
+    const email = emailInput.value;
+
+    sendPasswordResetEmail(auth, email)
+      .then(() => {
+        // Successfully sent reset email
+        alert("Password reset email sent! Please check your inbox.");
+        window.location.href = "../pages/login.html"; // Redirect to login page
+      })
+      .catch((error) => {
+        // Handle errors
+        alert("Error: " + error.message);
+      });
+  });
 }
