@@ -1,76 +1,23 @@
-* {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
-}
-
 body {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    height: 100vh;
-    font-family: Arial, sans-serif;
-    background: #f5f5dc;
-}
-
-.container {
+    background-color: #87CEEB; 
+    color: #000000; 
     text-align: center;
-    background-color: #ffffff;
-    padding: 2rem;
-    border-radius: 10px;
-    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
-    width: 100%;
-    max-width: 400px;
+    margin-top: 15%;
 }
 
 h1 {
-    color: #2a52be;
-    font-size: 24px;
-    margin-bottom: 1rem;
+    font-size: 2.5em;
+    margin-bottom: 20px;
+    letter-spacing: 2px;
 }
 
-.form-container h2 {
-    font-size: 20px;
-    color: #333;
-    margin-bottom: 1rem;
-}
 
-label {
-    font-size: 14px;
-    color: #777;
-    display: block;
-    margin: 0.5rem 0 0.2rem;
-}
-
-input[type="email"],
-input[type="password"],
-input[type="text"],
-input[type="date"],
-input[type="file"] {
-    width: 100%;
-    padding: 0.5rem;
-    border: 1px solid #ddd;
-    border-radius: 5px;
-    margin-bottom: 1rem;
-    font-size: 16px;
-    transition: border-color 0.3s;
-}
-
-input:focus {
-    border-color: #2a52be;
-}
-
-button {
-    width: 100%;
-    padding: 0.7rem;
-    background-color: #4d9f0c;
-    color: white;
+.button {
+    background-color: #3EB489;
+    color: #fff;
     border: none;
-    border-radius: 5px;
-    font-size: 16px;
-    cursor: pointer;
+    padding: 15px 30px;
+    font-size: 1.2em;
+    border-radius: 8px;
 }
 
-button:hover {
-    background-color: #3a7e08;
-}
