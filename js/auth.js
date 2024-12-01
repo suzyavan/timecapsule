@@ -1,118 +1,79 @@
-// Import Firebase services
-import { initializeApp } from "firebase/app";
-import { getAuth, signInWithEmailAndPassword, createUserWithEmailAndPassword, sendPasswordResetEmail, signInWithPopup, GoogleAuthProvider, onAuthStateChanged } from "firebase/auth";
+import { auth } from './firebase.js'; // Import the initialized Firebase auth object
+import {
+  createUserWithEmailAndPassword,
+  signInWithEmailAndPassword,
+  GoogleAuthProvider,
+  signInWithPopup,
+  sendPasswordResetEmail
+} from 'https://www.gstatic.com/firebasejs/9.6.1/firebase-auth.js';
 
-// Firebase configuration
-const firebaseConfig = {
-  apiKey: "AIzaSyC7P1txKNJdO5WF0mw6e0st4gx24W68SEk",
-  authDomain: "timecapsule-5df93.firebaseapp.com",
-  projectId: "timecapsule-5df93",
-  storageBucket: "timecapsule-5df93.firebasestorage.app",
-  messagingSenderId: "613666356877",
-  appId: "1:613666356877:web:f1710b831dbb79b2b9acc4",
-  measurementId: "G-YEFXC4EGPK"
+// **Sign-Up Function**
+const signUp = async (email, password) => {
+  try {
+    const userCredential = await createUserWithEmailAndPassword(auth, email, password);
+    alert('Sign-Up Successful! Welcome, ' + userCredential.user.email);
+    // Redirect or perform further actions after successful sign-up
+    window.location.href = "index.html"; // Adjust the redirect as needed
+  } catch (error) {
+    alert('Error: ' + error.message);
+  }
 };
 
-// Initialize Firebase
-const app = initializeApp(firebaseConfig);
-const auth = getAuth(app);
+// **Login Function**
+const login = async (email, password) => {
+  try {
+    const userCredential = await signInWithEmailAndPassword(auth, email, password);
+    alert('Login Successful! Welcome back, ' + userCredential.user.email);
+    // Redirect or perform further actions after successful login
+    window.location.href = "index.html"; // Adjust the redirect as needed
+  } catch (error) {
+    alert('Login Failed: ' + error.message);
+  }
+};
 
-// Google Auth Provider
-const googleProvider = new GoogleAuthProvider();
+// **Google Sign-In Function**
+const googleSignIn = async () => {
+  const provider = new GoogleAuthProvider();
+  try {
+    const result = await signInWithPopup(auth, provider);
+    alert('Google Sign-In Successful!');
+    // Redirect or perform further actions after successful Google login
+    window.location.href = "index.html";
+  } catch (error) {
+    alert('Google Sign-In Failed: ' + error.message);
+  }
+};
 
-// Sign Up Form (signup.html)
-const signupForm = document.getElementById("signupForm");
-if (signupForm) {
-    signupForm.addEventListener("submit", (e) => {
-        e.preventDefault();
-        const email = document.getElementById("email").value;
-        const password = document.getElementById("password").value;
-        
-        createUserWithEmailAndPassword(auth, email, password)
-            .then((userCredential) => {
-                window.location.href = "../pages/capsule.html"; // Redirect to capsule page
-            })
-            .catch((error) => {
-                const errorMessage = error.message;
-                alert("Error: " + errorMessage);
-            });
-    });
-}
+// **Password Reset Function**
+const resetPassword = async (email) => {
+  try {
+    await sendPasswordResetEmail(auth, email);
+    alert('Password reset email sent! Check your inbox.');
+  } catch (error) {
+    alert('Error: ' + error.message);
+  }
+};
 
-// Google Sign Up Button (signup.html)
-const googleSignupButton = document.getElementById("googleSignupButton");
-if (googleSignupButton) {
-    googleSignupButton.addEventListener("click", () => {
-        signInWithPopup(auth, googleProvider)
-            .then((result) => {
-                window.location.href = "../pages/capsule.html"; // Redirect to capsule page
-            })
-            .catch((error) => {
-                const errorMessage = error.message;
-                alert("Error: " + errorMessage);
-            });
-    });
-}
+// **Event listeners for the forms and buttons**
+document.getElementById('signupForm')?.addEventListener('submit', (e) => {
+  e.preventDefault();
+  const email = document.getElementById('email').value;
+  const password = document.getElementById('password').value;
+  signUp(email, password);
+});
 
-// Login Form (login.html)
-const loginForm = document.getElementById("loginForm");
-if (loginForm) {
-    loginForm.addEventListener("submit", (e) => {
-        e.preventDefault();
-        const email = document.getElementById("email").value;
-        const password = document.getElementById("password").value;
-        
-        signInWithEmailAndPassword(auth, email, password)
-            .then((userCredential) => {
-                window.location.href = "../pages/capsule.html"; // Redirect to capsule page
-            })
-            .catch((error) => {
-                const errorMessage = error.message;
-                alert("Error: " + errorMessage);
-            });
-    });
-}
+document.getElementById('loginForm')?.addEventListener('submit', (e) => {
+  e.preventDefault();
+  const email = document.getElementById('email').value;
+  const password = document.getElementById('password').value;
+  login(email, password);
+});
 
-// Google Login Button (login.html)
-const googleLoginButton = document.getElementById("googleLoginButton");
-if (googleLoginButton) {
-    googleLoginButton.addEventListener("click", () => {
-        signInWithPopup(auth, googleProvider)
-            .then((result) => {
-                window.location.href = "../pages/capsule.html"; // Redirect to capsule page
-            })
-            .catch((error) => {
-                const errorMessage = error.message;
-                alert("Error: " + errorMessage);
-            });
-    });
-}
+document.getElementById('googleSignupButton')?.addEventListener('click', googleSignIn);
+document.getElementById('googleLoginButton')?.addEventListener('click', googleSignIn);
 
-// Forgot Password Form (forgotpw.html)
-const forgotPasswordForm = document.getElementById("forgotPasswordForm");
-if (forgotPasswordForm) {
-    forgotPasswordForm.addEventListener("submit", (e) => {
-        e.preventDefault();
-        const email = document.getElementById("email").value;
-
-        sendPasswordResetEmail(auth, email)
-            .then(() => {
-                alert("Password reset email sent! Please check your inbox.");
-                window.location.href = "../pages/login.html"; // Redirect to login page
-            })
-            .catch((error) => {
-                const errorMessage = error.message;
-                alert("Error: " + errorMessage);
-            });
-    });
-}
-
-// Check if user is logged in (capsule.html)
-onAuthStateChanged(auth, (user) => {
-    if (user) {
-        console.log("User is logged in:", user);
-    } else {
-        console.log("No user is logged in. Redirecting to login page.");
-        window.location.href = "../pages/login.html"; // Redirect to login if not logged in
-    }
+document.getElementById('forgotPasswordForm')?.addEventListener('submit', (e) => {
+  e.preventDefault();
+  const email = document.getElementById('email').value;
+  resetPassword(email);
 });
