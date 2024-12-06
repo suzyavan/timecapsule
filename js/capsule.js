@@ -1,78 +1,114 @@
-// Import the auth and db instances from firebase.js
-import { auth, db } from "../js/firebase.js";
-import { collection, addDoc, getDocs } from "https://www.gstatic.com/firebasejs/11.0.2/firebase-firestore.js";
+import { auth } from "../js/firebase.js";
+import { getDatabase, ref, push, get } from "https://www.gstatic.com/firebasejs/11.0.2/firebase-database.js";
+import { getStorage, ref as storageRef, uploadBytes, getDownloadURL } from "https://www.gstatic.com/firebasejs/11.0.2/firebase-storage.js";
 
-// Listen for user authentication state
-auth.onAuthStateChanged(async (user) => {
-    if (user) {
-        console.log("User is logged in:", user.uid);
-        // Proceed to add or read data
-        try {
-            // Add document or other Firestore operations here
-            await addDoc(collection(db, "timecapsule"), {  // Changed "capsule" to "timecapsule"
-                userId: user.uid,
-                content: "Your capsule content here",
-                timestamp: new Date()
+// Initialize the database and storage
+const db = getDatabase();
+const storage = getStorage();
+
+document.addEventListener("DOMContentLoaded", () => {
+    const loginStatus = document.getElementById("loginStatus");
+    const capsuleForm = document.getElementById("capsuleForm");
+    const capsuleList = document.getElementById("capsuleList");
+
+    if (!loginStatus || !capsuleForm || !capsuleList) {
+        console.error("Required DOM elements are missing.");
+        return;
+    }
+
+    // Listen for user authentication state
+    auth.onAuthStateChanged(async (user) => {
+        if (user) {
+            loginStatus.textContent = `Logged in as: ${user.email}`;
+
+            // Load existing capsules for the logged-in user
+            loadUserCapsules(user.uid);
+
+            // Handle form submission
+            capsuleForm.addEventListener("submit", async (event) => {
+                event.preventDefault();
+
+                const message = document.getElementById("message").value;
+                const openDate = document.getElementById("openDate").value;
+                const imageUpload = document.getElementById("imageUpload").files[0];
+
+                if (!message.trim() || !openDate) {
+                    alert("Message and open date are required!");
+                    return;
+                }
+
+                try {
+                    // Reference to the user's folder in the database
+                    const userRef = ref(db, `capsules/${user.uid}`);
+
+                    // Upload image if available and get its URL
+                    let imageUrl = null;
+                    if (imageUpload) {
+                        const imgRef = storageRef(storage, `capsule_images/${user.uid}/${imageUpload.name}`);
+                        const snapshot = await uploadBytes(imgRef, imageUpload);
+                        imageUrl = await getDownloadURL(snapshot.ref);
+                    }
+
+                    // Create capsule data
+                    const capsuleData = {
+                        message: message,
+                        openDate: openDate,
+                        timestamp: Date.now(),
+                        imageUrl: imageUrl, // Include image URL if available
+                    };
+
+                    // Save capsule data under the user's folder
+                    await push(userRef, capsuleData);
+
+                    // Display capsule in the list
+                    addCapsuleToList(message, openDate, imageUrl);
+
+                    alert("Capsule saved successfully!");
+                    capsuleForm.reset();
+                } catch (error) {
+                    console.error("Error saving capsule:", error);
+                    alert("Failed to save capsule. Please try again.");
+                }
             });
-            console.log("Document added successfully!");
+        } else {
+            loginStatus.textContent = "Not logged in. Please log in to create a capsule.";
+            console.log("No user is logged in.");
+        }
+    });
+
+    // Function to load all capsules for a user
+    async function loadUserCapsules(uid) {
+        try {
+            const userRef = ref(db, `capsules/${uid}`);
+            const snapshot = await get(userRef);
+
+            if (snapshot.exists()) {
+                const capsules = snapshot.val();
+                Object.values(capsules).forEach((capsule) => {
+                    addCapsuleToList(capsule.message, capsule.openDate, capsule.imageUrl);
+                });
+            } else {
+                console.log("No capsules found for this user.");
+            }
         } catch (error) {
-            console.error("Error adding document: ", error);
+            console.error("Error loading user capsules:", error);
         }
-    } else {
-        console.log("No user is logged in");
-        // Handle the case where the user is not logged in
+    }
+
+    // Function to add a capsule to the list
+    function addCapsuleToList(message, openDate, imageUrl) {
+        const listItem = document.createElement("li");
+        listItem.textContent = `Message: ${message}, Open Date: ${openDate}`;
+
+        if (imageUrl) {
+            const img = document.createElement("img");
+            img.src = imageUrl;
+            img.alt = "Capsule Image";
+            img.style.maxWidth = "100px";
+            img.style.display = "block";
+            listItem.appendChild(img);
+        }
+
+        capsuleList.appendChild(listItem);
     }
 });
-
-// Add new capsule to Firestore
-document.getElementById('capsuleForm').addEventListener('submit', async (e) => {
-  e.preventDefault();
-
-  const user = auth.currentUser;
-  if (!user) {
-    alert("You need to be logged in to save a capsule.");
-    return;
-  }
-
-  const message = document.getElementById('message').value;
-  const openDate = document.getElementById('openDate').value;
-
-  try {
-    // Add document to Firestore
-    await addDoc(collection(db, "timecapsule"), {  // Changed "capsule" to "timecapsule"
-        userId: user.uid,  // Store the user's UID
-        message,
-        openDate,
-        createdAt: new Date()
-     });
-     
-    alert("Capsule saved successfully!");
-
-    // Reload capsules after saving
-    await loadCapsules(user.uid);
-  } catch (error) {
-    console.error("Error adding document: ", error);
-    alert("Error saving capsule: " + error.message);
-  }
-});
-
-// Load user's existing capsules from Firestore
-async function loadCapsules(userId) {
-    try {
-      const querySnapshot = await getDocs(collection(db, "timecapsule"));  // Changed "capsule" to "timecapsule"
-      const capsuleList = document.getElementById('capsuleList');
-      capsuleList.innerHTML = ''; // Clear the list before adding new data
-  
-      querySnapshot.forEach((doc) => {
-        const capsuleData = doc.data();
-        if (capsuleData.userId === userId) {
-          const li = document.createElement('li');
-          li.textContent = `Message: ${capsuleData.message}, Open Date: ${capsuleData.openDate}, Created At: ${capsuleData.createdAt.toDate()}`;
-          capsuleList.appendChild(li);
-        }
-      });
-    } catch (error) {
-      console.error("Error loading capsules: ", error);
-      alert("Error loading capsules: " + error.message);
-    }
-}
