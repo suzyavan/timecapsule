@@ -6,7 +6,7 @@ const firebaseConfig = {
   apiKey: "AIzaSyC7P1txKNJdO5WF0mw6e0st4gx24W68SEk",
   authDomain: "timecapsule-5df93.firebaseapp.com",
   projectId: "timecapsule-5df93",
-  storageBucket: "timecapsule-5df93.appspot.com",
+  storageBucket: "gs://timecapsule-5df93.firebasestorage.app",
   messagingSenderId: "613666356877",
   appId: "1:613666356877:web:f1710b831dbb79b2b9acc4",
   measurementId: "G-YEFXC4EGPK"
