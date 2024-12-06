@@ -20,8 +20,11 @@
             <label for="openDate">Open Date:</label>
             <input type="date" id="openDate" required>
 
-            <label for="imageUpload">Upload Image:</label>
-            <input type="file" id="imageUpload" accept="image/*">
+            <label for="imageUpload">Upload Image (optional): <br> PNG, JPG, JPEG only.</label>
+            <input type="file" id="imageUpload" accept="image/png, image/jpeg, image/jpg">
+
+            <!-- Add a progress bar below the file input -->
+            <progress id="progressBar" value="0" max="100" style="display: none; width: 100%;"></progress>
 
             <button type="submit">Save Capsule</button>
         </form>
