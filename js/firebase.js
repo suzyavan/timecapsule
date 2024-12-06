@@ -1,8 +1,7 @@
-// Import Firebase modules
-import { initializeApp } from "https://www.gstatic.com/firebasejs/11.0.2/firebase-app.js"
-import { getAuth } from "https://www.gstatic.com/firebasejs/11.0.2/firebase-auth.js"
+import { initializeApp } from "https://www.gstatic.com/firebasejs/11.0.2/firebase-app.js";
+import { getAuth } from "https://www.gstatic.com/firebasejs/11.0.2/firebase-auth.js";
+import { getFirestore } from "https://www.gstatic.com/firebasejs/11.0.2/firebase-firestore.js";
 
-// Your web app's Firebase configuration
 const firebaseConfig = {
   apiKey: "AIzaSyC7P1txKNJdO5WF0mw6e0st4gx24W68SEk",
   authDomain: "timecapsule-5df93.firebaseapp.com",
@@ -13,8 +12,8 @@ const firebaseConfig = {
   measurementId: "G-YEFXC4EGPK"
 };
 
-// Initialize Firebase
 const app = initializeApp(firebaseConfig);
 const auth = getAuth(app);
-export { auth }; 
+const db = getFirestore(app); // Initialize Firestore instance
 
+export { auth, db }; 
