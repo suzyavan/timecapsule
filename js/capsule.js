@@ -11,6 +11,7 @@ document.addEventListener("DOMContentLoaded", () => {
     const capsuleForm = document.getElementById("capsuleForm");
     const capsuleList = document.getElementById("capsuleList");
     const titleInput = document.getElementById("title");
+    const messageInput = document.getElementById("message");
     const openDateInput = document.getElementById("openDate");
     const imageUploadInput = document.getElementById("imageUpload");
     const progressBar = document.getElementById("progressBar");
@@ -81,6 +82,12 @@ document.addEventListener("DOMContentLoaded", () => {
         } else {
             loginStatus.textContent = "Not logged in. Please log in to create a capsule.";
             signOutButton.style.display = "none";
+
+            titleInput.disabled = true;
+            messageInput.disabled = true; 
+            openDateInput.disabled = true;
+            imageUploadInput.disabled = true;
+            submitButton.disabled = true;
         }
     });
 
