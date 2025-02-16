@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Authentication - Virtual Time Capsule</title>
+    <link href="../css/styles.css" type="text/css" rel="stylesheet">
+</head>
+<body>
+    <div id="loginSection">
+        <h1>Log In</h1>
+        <form id="loginForm">
+            <label for="email">Email:</label>
+            <input type="email" id="email" required>
+            
+            <label for="password">Password:</label>
+            <input type="password" id="password" required>
+
+            <button type="submit" id="login-btn">Log In</button>
+        </form>
+        <br>
+        <a href="#" id="forgotPasswordLink">Forgot Password?</a>
+        <br><br>
+        <button id="googleLoginButton" class="google-login">Log In with Google</button>
+
+        <br>
+        <p>Don't have an account? <a href="#" id="switchToSignup">Sign Up</a></p>
+    </div>
+
+    <div id="signupSection" style="display:none;">
+        <h1>Sign Up</h1>
+        <form id="signupForm">
+            <label for="email">Email:</label>
+            <input type="email" id="signupEmail" required>
+            
+            <label for="password">Password:</label>
+            <input type="password" id="signupPassword" required>
+
+            <button type="submit" id="signup-btn">Sign Up</button>
+        </form>
+        
+        <br>
+        <button id="googleSignupButton" class="google-signup">Sign Up with Google</button>
+
+        <br>
+        <p>Already have an account? <a href="#" id="switchToLogin">Log In</a></p>
+    </div>
+
+    <div id="forgotPasswordSection" style="display:none;">
+        <h1>Forgot Password</h1>
+        <p>Enter your email address to receive a password reset link.</p>
+        <form id="forgotPasswordForm">
+            <label for="email">Email:</label>
+            <input type="email" id="forgotPasswordEmail" required>
+            <button type="submit">Send Reset Link</button>
+        </form><br>
+        <a href="#" id="backToLogin">Back to Log In</a>
+    </div>
+
+    <!-- External JavaScript File -->
+    <script type="module" src="../js/app.js"></script>
+</body>
+</html>

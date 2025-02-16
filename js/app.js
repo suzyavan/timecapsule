@@ -1,23 +1,25 @@
-import { auth } from '../js/firebase.js';
+import { auth } from './firebase.js';
 import { createUserWithEmailAndPassword, signInWithEmailAndPassword, signInWithPopup, GoogleAuthProvider, sendPasswordResetEmail } from "https://www.gstatic.com/firebasejs/11.0.2/firebase-auth.js";
 
 document.addEventListener("DOMContentLoaded", () => {
     const email = document.getElementById("email");
     const password = document.getElementById("password");
+    const signupEmail = document.getElementById("signupEmail");
+    const signupPassword = document.getElementById("signupPassword");
     const signUpBtn = document.getElementById("signup-btn");
     const loginBtn = document.getElementById("login-btn");
     const googleSignUpBtn = document.getElementById("googleSignupButton");
     const googleLoginBtn = document.getElementById("googleLoginButton");
     const forgotPasswordForm = document.getElementById("forgotPasswordForm");
-    const forgotPasswordEmail = document.getElementById("email");
+    const forgotPasswordEmail = document.getElementById("forgotPasswordEmail");
     const provider = new GoogleAuthProvider();
 
     const signUpButtonPressed = async (e) => {
         e.preventDefault();
         try {
-            const userCredential = await createUserWithEmailAndPassword(auth, email.value, password.value);
+            const userCredential = await createUserWithEmailAndPassword(auth, signupEmail.value, signupPassword.value);
             console.log('User signed up:', userCredential.user);
-            window.location.href = '../pages/login.html';
+            switchToLogin();
         } catch (error) {
             console.log('Error:', error.code, error.message);
         }
@@ -41,7 +43,7 @@ document.addEventListener("DOMContentLoaded", () => {
             const result = await signInWithPopup(auth, provider);
             const user = result.user;
             console.log('User signed up with Google:', user);
-            window.location.href = '../pages/login.html';
+            switchToLogin();
         } catch (error) {
             console.log('Error:', error.code, error.message);
         }
@@ -77,6 +79,26 @@ document.addEventListener("DOMContentLoaded", () => {
         }
     }
 
+    const switchToSignup = () => {
+        document.getElementById("loginSection").style.display = "none";
+        document.getElementById("signupSection").style.display = "block";
+    };
+
+    const switchToLogin = () => {
+        document.getElementById("signupSection").style.display = "none";
+        document.getElementById("loginSection").style.display = "block";
+    };
+
+    const switchToForgotPassword = () => {
+        document.getElementById("loginSection").style.display = "none";
+        document.getElementById("forgotPasswordSection").style.display = "block";
+    };
+
+    const switchToLoginFromForgot = () => {
+        document.getElementById("forgotPasswordSection").style.display = "none";
+        document.getElementById("loginSection").style.display = "block";
+    };
+
     if (signUpBtn) {
         signUpBtn.addEventListener("click", signUpButtonPressed);
     }
@@ -92,4 +114,10 @@ document.addEventListener("DOMContentLoaded", () => {
     if (forgotPasswordForm) {
         forgotPasswordForm.addEventListener("submit", sendResetLink);
     }
+
+    // Navigation links
+    document.getElementById("switchToSignup").addEventListener("click", switchToSignup);
+    document.getElementById("switchToLogin").addEventListener("click", switchToLogin);
+    document.getElementById("forgotPasswordLink").addEventListener("click", switchToForgotPassword);
+    document.getElementById("backToLogin").addEventListener("click", switchToLoginFromForgot);
 });
