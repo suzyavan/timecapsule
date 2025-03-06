@@ -2,6 +2,20 @@ import { auth } from './firebase.js';
 import { createUserWithEmailAndPassword, signInWithEmailAndPassword, signInWithPopup, GoogleAuthProvider, sendPasswordResetEmail } from "https://www.gstatic.com/firebasejs/11.0.2/firebase-auth.js";
 
 document.addEventListener("DOMContentLoaded", () => {
+    const loginSection = document.getElementById("loginSection");
+    const signupSection = document.getElementById("signupSection");
+    if (loginSection && signupSection) {
+        const params = new URLSearchParams(window.location.search);
+        const mode = params.get('mode');
+        if (mode === 'signup') {
+            loginSection.style.display = "none";
+            signupSection.style.display = "block";
+        } else {
+            loginSection.style.display = "block";
+            signupSection.style.display = "none";
+        }
+    }
+
     const email = document.getElementById("email");
     const password = document.getElementById("password");
     const signupEmail = document.getElementById("signupEmail");
@@ -23,7 +37,7 @@ document.addEventListener("DOMContentLoaded", () => {
         } catch (error) {
             console.log('Error:', error.code, error.message);
         }
-    }
+    };
 
     const loginButtonPressed = async (e) => {
         e.preventDefault();
@@ -35,7 +49,7 @@ document.addEventListener("DOMContentLoaded", () => {
             console.log('Error:', error.code, error.message);
             alert('Login failed: ' + error.message);
         }
-    }
+    };
 
     const googleSignUpButtonPressed = async (e) => {
         e.preventDefault();
@@ -47,7 +61,7 @@ document.addEventListener("DOMContentLoaded", () => {
         } catch (error) {
             console.log('Error:', error.code, error.message);
         }
-    }
+    };
 
     const googleLoginButtonPressed = async (e) => {
         e.preventDefault();
@@ -60,24 +74,24 @@ document.addEventListener("DOMContentLoaded", () => {
             console.log('Error:', error.code, error.message);
             alert('Login failed: ' + error.message);
         }
-    }
+    };
 
     const sendResetLink = async (e) => {
         e.preventDefault();
-        const email = forgotPasswordEmail.value;
-        if (!email) {
+        const emailVal = forgotPasswordEmail.value;
+        if (!emailVal) {
             alert("Please enter an email address.");
             return;
         }
         try {
-            await sendPasswordResetEmail(auth, email);
-            console.log('Password reset link sent to:', email);
+            await sendPasswordResetEmail(auth, emailVal);
+            console.log('Password reset link sent to:', emailVal);
             alert('Password reset link sent! Please check your email.');
         } catch (error) {
             console.log('Error:', error.code, error.message);
             alert('Error: ' + error.message);
         }
-    }
+    };
 
     const switchToSignup = () => {
         document.getElementById("loginSection").style.display = "none";
@@ -115,7 +129,6 @@ document.addEventListener("DOMContentLoaded", () => {
         forgotPasswordForm.addEventListener("submit", sendResetLink);
     }
 
-    // Navigation links
     document.getElementById("switchToSignup").addEventListener("click", switchToSignup);
     document.getElementById("switchToLogin").addEventListener("click", switchToLogin);
     document.getElementById("forgotPasswordLink").addEventListener("click", switchToForgotPassword);
