@@ -1,9 +1,11 @@
-import { auth } from './firebase.js';
-import { createUserWithEmailAndPassword, signInWithEmailAndPassword, signInWithPopup, GoogleAuthProvider, sendPasswordResetEmail } from "https://www.gstatic.com/firebasejs/11.0.2/firebase-auth.js";
+import { auth } from '../js/firebase.js';
+import { createUserWithEmailAndPassword, signInWithEmailAndPassword, signInWithPopup, GoogleAuthProvider, sendPasswordResetEmail, signOut, onAuthStateChanged} from "https://www.gstatic.com/firebasejs/11.0.2/firebase-auth.js";
 
 document.addEventListener("DOMContentLoaded", () => {
+    // === Auth Page Logic ===
     const loginSection = document.getElementById("loginSection");
     const signupSection = document.getElementById("signupSection");
+
     if (loginSection && signupSection) {
         const params = new URLSearchParams(window.location.search);
         const mode = params.get('mode');
@@ -14,19 +16,19 @@ document.addEventListener("DOMContentLoaded", () => {
             loginSection.style.display = "block";
             signupSection.style.display = "none";
         }
-    }
 
-    const email = document.getElementById("email");
-    const password = document.getElementById("password");
-    const signupEmail = document.getElementById("signupEmail");
-    const signupPassword = document.getElementById("signupPassword");
-    const signUpBtn = document.getElementById("signup-btn");
-    const loginBtn = document.getElementById("login-btn");
-    const googleSignUpBtn = document.getElementById("googleSignupButton");
-    const googleLoginBtn = document.getElementById("googleLoginButton");
-    const forgotPasswordForm = document.getElementById("forgotPasswordForm");
-    const forgotPasswordEmail = document.getElementById("forgotPasswordEmail");
-    const provider = new GoogleAuthProvider();
+        // Only run auth page-specific logic if those sections exist
+        const email = document.getElementById("email");
+        const password = document.getElementById("password");
+        const signupEmail = document.getElementById("signupEmail");
+        const signupPassword = document.getElementById("signupPassword");
+        const signUpBtn = document.getElementById("signup-btn");
+        const loginBtn = document.getElementById("login-btn");
+        const googleSignUpBtn = document.getElementById("googleSignupButton");
+        const googleLoginBtn = document.getElementById("googleLoginButton");
+        const forgotPasswordForm = document.getElementById("forgotPasswordForm");
+        const forgotPasswordEmail = document.getElementById("forgotPasswordEmail");
+        const provider = new GoogleAuthProvider();
 
     const signUpButtonPressed = async (e) => {
         e.preventDefault();
@@ -44,7 +46,7 @@ document.addEventListener("DOMContentLoaded", () => {
         try {
             const userCredential = await signInWithEmailAndPassword(auth, email.value, password.value);
             console.log('User logged in:', userCredential.user);
-            window.location.href = '../pages/capsule.html';
+            window.location.href = '../index.html';
         } catch (error) {
             console.log('Error:', error.code, error.message);
             alert('Login failed: ' + error.message);
@@ -69,7 +71,7 @@ document.addEventListener("DOMContentLoaded", () => {
             const result = await signInWithPopup(auth, provider);
             const user = result.user;
             console.log('User logged in with Google:', user);
-            window.location.href = '../pages/capsule.html';
+            window.location.href = '../index.html';
         } catch (error) {
             console.log('Error:', error.code, error.message);
             alert('Login failed: ' + error.message);
@@ -113,24 +115,40 @@ document.addEventListener("DOMContentLoaded", () => {
         document.getElementById("loginSection").style.display = "block";
     };
 
-    if (signUpBtn) {
-        signUpBtn.addEventListener("click", signUpButtonPressed);
-    }
-    if (loginBtn) {
-        loginBtn.addEventListener("click", loginButtonPressed);
-    }
-    if (googleSignUpBtn) {
-        googleSignUpBtn.addEventListener("click", googleSignUpButtonPressed);
-    }
-    if (googleLoginBtn) {
-        googleLoginBtn.addEventListener("click", googleLoginButtonPressed);
-    }
-    if (forgotPasswordForm) {
-        forgotPasswordForm.addEventListener("submit", sendResetLink);
+    if (signUpBtn) signUpBtn.addEventListener("click", signUpButtonPressed);
+        if (loginBtn) loginBtn.addEventListener("click", loginButtonPressed);
+        if (googleSignUpBtn) googleSignUpBtn.addEventListener("click", googleSignUpButtonPressed);
+        if (googleLoginBtn) googleLoginBtn.addEventListener("click", googleLoginButtonPressed);
+        if (forgotPasswordForm) forgotPasswordForm.addEventListener("submit", sendResetLink);
+
+        document.getElementById("switchToSignup").addEventListener("click", switchToSignup);
+        document.getElementById("switchToLogin").addEventListener("click", switchToLogin);
+        document.getElementById("forgotPasswordLink").addEventListener("click", switchToForgotPassword);
+        document.getElementById("backToLogin").addEventListener("click", switchToLoginFromForgot);
     }
 
-    document.getElementById("switchToSignup").addEventListener("click", switchToSignup);
-    document.getElementById("switchToLogin").addEventListener("click", switchToLogin);
-    document.getElementById("forgotPasswordLink").addEventListener("click", switchToForgotPassword);
-    document.getElementById("backToLogin").addEventListener("click", switchToLoginFromForgot);
+    // === Navbar Auth Logic (works on any page) ===
+    const authButtons = document.getElementById("authButtons");
+    const signOutBtn = document.getElementById("signOutBtn");
+
+    if (authButtons && signOutBtn) {
+        onAuthStateChanged(auth, (user) => {
+            if (user) {
+                authButtons.style.display = "none";
+                signOutBtn.style.display = "inline-block";
+            } else {
+                authButtons.style.display = "flex";
+                signOutBtn.style.display = "none";
+            }
+        });
+
+        signOutBtn.addEventListener("click", async () => {
+            try {
+                await signOut(auth);
+                window.location.reload();
+            } catch (error) {
+                console.error("Error signing out:", error);
+            }
+        });
+    }
 });
