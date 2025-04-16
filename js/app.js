@@ -2,7 +2,6 @@ import { auth } from '../js/firebase.js';
 import { createUserWithEmailAndPassword, signInWithEmailAndPassword, signInWithPopup, GoogleAuthProvider, sendPasswordResetEmail, signOut, onAuthStateChanged} from "https://www.gstatic.com/firebasejs/11.0.2/firebase-auth.js";
 
 document.addEventListener("DOMContentLoaded", () => {
-    // === Auth Page Logic ===
     const loginSection = document.getElementById("loginSection");
     const signupSection = document.getElementById("signupSection");
 
@@ -17,7 +16,6 @@ document.addEventListener("DOMContentLoaded", () => {
             signupSection.style.display = "none";
         }
 
-        // Only run auth page-specific logic if those sections exist
         const email = document.getElementById("email");
         const password = document.getElementById("password");
         const signupEmail = document.getElementById("signupEmail");
@@ -127,7 +125,6 @@ document.addEventListener("DOMContentLoaded", () => {
         document.getElementById("backToLogin").addEventListener("click", switchToLoginFromForgot);
     }
 
-    // === Navbar Auth Logic (works on any page) ===
     const authButtons = document.getElementById("authButtons");
     const signOutBtn = document.getElementById("signOutBtn");
 
