@@ -9,20 +9,22 @@
 <body>
 
     <nav class="navbar">
-        <div class="nav-left">
-            <h2>Virtual Time Capsule</h2>
+        <div class="left-space"></div>
+      
+        <div class="navbar-title">Virtual Time Capsule</div>
+      
+        <div class="auth-buttons" id="authButtons">
+          <a href="../pages/auth.html?mode=login" class="button">Login</a>
+          <a href="../pages/auth.html?mode=signup" class="button">Sign Up</a>
         </div>
-        <ul class="nav-links">
-            <li><a href="#about">About Us</a></li>
-            <li><a href="#contact">Contact</a></li>
-            <li><a href="../pages/capsule.html">Capsule</a></li>
-        </ul>
-        <div class="nav-right" id="authButtons">
-            <a href="../pages/auth.html?mode=login" class="button">Log In</a>
-            <a href="../pages/auth.html?mode=signup" class="button">Create an Account</a>
+      
+        <div id="userInfo" style="display: none;">
+          <span id="userEmail"></span>
+          <button id="signOutBtn" class="button" style="display: none;">Sign Out</button>
         </div>
-        <button id="signOutBtn" class="button" style="display: none;">Sign Out</button>
-    </nav>
+      </nav>
+      
+    
 
     <div class="container">
         <h1>Welcome to the Virtual Time Capsule</h1>

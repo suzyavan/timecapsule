@@ -8,48 +8,72 @@ body {
 }
 
 .navbar {
+    background-color: #4A90E2;
+    padding: 12px 20px;
+    border-radius: 12px;
+    position: fixed;
+    top: 20px;
+    left: 50%;
+    transform: translateX(-50%);
     display: flex;
     justify-content: space-between;
     align-items: center;
-    background: #2c3e50;
-    padding: 15px 30px;
-    border-radius: 15px;
-    margin: 10px auto;
-    width: 95%;
-}
-
-.nav-left h2, .nav-links a, .nav-right .button {
+    width: 90%;
+    max-width: 1000px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    z-index: 1000;
+    position: relative; 
+  }
+  
+  .navbar-title {
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
     color: white;
-    font-size: 16px;
-}
-
-.nav-links {
-    list-style: none;
-    display: flex;
-    gap: 20px;
-}
-
-.nav-right {
-    display: flex;
-    gap: 15px;
-}
-
-.button, .google-login, .google-signup {
-    background-color: #e74c3c;
-    color: white;
-    padding: 10px 15px;
-    text-decoration: none;
-    border-radius: 15px;
+    font-size: 1.4em;
     font-weight: bold;
-    transition: background-color 0.3s;
-}
+    text-align: center;
+    white-space: nowrap;
+    pointer-events: none; 
+  }
+  
+  .left-space {
+    width: 150px;
+  }
+  .auth-buttons {
+    display: flex;
+    gap: 10px;
+    min-width: 150px;
+    justify-content: flex-end;
+  }
+  
+  .button {
+    background-color: white;
+    color: #4A90E2;
+    padding: 6px 12px;
+    border: none;
+    border-radius: 6px;
+    text-decoration: none;
+    font-weight: bold;
+    font-size: 0.95em;
+    transition: background-color 0.3s, color 0.3s;
+  }
+  
+  .button:hover {
+    background-color: #e0ecff;
+  }
 
-.button:hover, .google-login:hover, .google-signup:hover {
-    background-color: #c0392b;
-}
+  #userInfo {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    min-width: 150px;
+    justify-content: flex-end;
+  }
+  
 
 .container, section {
-    margin-top: 50px;
+    margin-top: 100px;
     padding: 30px;
     background: white;
     border-radius: 15px;
@@ -110,3 +134,4 @@ a:hover {
 #homeButton:hover {
     background-color: #2980b9;
 }
+
