@@ -1,4 +1,4 @@
-import { auth } from '../js/firebase.js';
+import { auth } from '../js/firebase.js'; 
 import {
     createUserWithEmailAndPassword,
     signInWithEmailAndPassword,
@@ -36,18 +36,25 @@ document.addEventListener("DOMContentLoaded", () => {
         const forgotPasswordEmail = document.getElementById("forgotPasswordEmail");
         const provider = new GoogleAuthProvider();
 
+        // Function to verify reCAPTCHA with server-side validation
         const verifyCaptcha = async (recaptchaResponse) => {
-            const response = await fetch('/verify-recaptcha', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify({ recaptchaResponse })
-            });
+            try {
+                const response = await fetch('/verify-recaptcha', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({ recaptchaResponse }) // Send the response to the server
+                });
 
-            const data = await response.json();
-            if (data.error) {
-                throw new Error('reCAPTCHA validation failed');
+                const data = await response.json();
+                if (data.error) {
+                    throw new Error('reCAPTCHA validation failed');
+                }
+            } catch (error) {
+                console.error('Error during reCAPTCHA verification:', error);
+                alert('Error during reCAPTCHA verification');
+                throw error; // Throw the error to stop further execution
             }
         };
 
@@ -61,6 +68,7 @@ document.addEventListener("DOMContentLoaded", () => {
             }
 
             try {
+                // Verify reCAPTCHA before proceeding with Firebase authentication
                 await verifyCaptcha(recaptchaResponse);
 
                 const userCredential = await createUserWithEmailAndPassword(auth, signupEmail.value, signupPassword.value);
@@ -83,11 +91,12 @@ document.addEventListener("DOMContentLoaded", () => {
             }
 
             try {
+                // Verify reCAPTCHA before proceeding with Firebase authentication
                 await verifyCaptcha(recaptchaResponse);
 
                 const userCredential = await signInWithEmailAndPassword(auth, email.value, password.value);
                 console.log('User logged in:', userCredential.user);
-                localStorage.setItem("loggedInViaLoginForm", "true"); 
+                localStorage.setItem("loggedInViaLoginForm", "true");
                 window.location.href = '../index.html';
             } catch (error) {
                 console.log('Error:', error.code, error.message);
@@ -105,6 +114,7 @@ document.addEventListener("DOMContentLoaded", () => {
             }
 
             try {
+                // Verify reCAPTCHA before proceeding with Google authentication
                 await verifyCaptcha(recaptchaResponse);
 
                 const result = await signInWithPopup(auth, provider);
@@ -127,12 +137,13 @@ document.addEventListener("DOMContentLoaded", () => {
             }
 
             try {
+                // Verify reCAPTCHA before proceeding with Google authentication
                 await verifyCaptcha(recaptchaResponse);
 
                 const result = await signInWithPopup(auth, provider);
                 const user = result.user;
                 console.log('User logged in with Google:', user);
-                localStorage.setItem("loggedInViaLoginForm", "true"); 
+                localStorage.setItem("loggedInViaLoginForm", "true");
                 window.location.href = '../index.html';
             } catch (error) {
                 console.log('Error:', error.code, error.message);

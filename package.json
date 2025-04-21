@@ -1,6 +1,9 @@
 {
   "dependencies": {
+    "body-parser": "^2.2.0",
     "crypto-js": "^4.2.0",
-    "firebase": "^11.0.2"
+    "express": "^5.1.0",
+    "firebase": "^11.0.2",
+    "node-fetch": "^3.3.2"
   }
 }
