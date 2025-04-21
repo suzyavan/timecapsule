@@ -36,61 +36,79 @@ document.addEventListener("DOMContentLoaded", () => {
         const forgotPasswordEmail = document.getElementById("forgotPasswordEmail");
         const provider = new GoogleAuthProvider();
 
+        const verifyCaptcha = async (recaptchaResponse) => {
+            const response = await fetch('/verify-recaptcha', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ recaptchaResponse })
+            });
+
+            const data = await response.json();
+            if (data.error) {
+                throw new Error('reCAPTCHA validation failed');
+            }
+        };
+
         const signUpButtonPressed = async (e) => {
             e.preventDefault();
-        
+
             const recaptchaResponse = grecaptcha.getResponse();
-            console.log('reCAPTCHA Response:', recaptchaResponse);
             if (!recaptchaResponse) {
-                alert("Please complete the reCAPTCHA.");
+                alert('Please complete the CAPTCHA');
                 return;
             }
-            
-        
+
             try {
+                await verifyCaptcha(recaptchaResponse);
+
                 const userCredential = await createUserWithEmailAndPassword(auth, signupEmail.value, signupPassword.value);
                 console.log('User signed up:', userCredential.user);
                 alert("Account created successfully! You can now log in.");
-                grecaptcha.reset(); 
                 window.location.href = "auth.html?mode=login";
             } catch (error) {
                 console.log('Error:', error.code, error.message);
                 alert('Sign-up failed: ' + error.message);
-                grecaptcha.reset(); 
             }
         };
-        
+
         const loginButtonPressed = async (e) => {
             e.preventDefault();
-        
+
             const recaptchaResponse = grecaptcha.getResponse();
-            console.log('reCAPTCHA Response:', recaptchaResponse);
             if (!recaptchaResponse) {
-                alert("Please complete the reCAPTCHA.");
+                alert('Please complete the CAPTCHA');
                 return;
             }
-            
-        
+
             try {
+                await verifyCaptcha(recaptchaResponse);
+
                 const userCredential = await signInWithEmailAndPassword(auth, email.value, password.value);
                 console.log('User logged in:', userCredential.user);
-                localStorage.setItem("loggedInViaLoginForm", "true");
-                grecaptcha.reset();
+                localStorage.setItem("loggedInViaLoginForm", "true"); 
                 window.location.href = '../index.html';
             } catch (error) {
                 console.log('Error:', error.code, error.message);
                 alert('Login failed: ' + error.message);
-                grecaptcha.reset();
             }
         };
-        
 
         const googleSignUpButtonPressed = async (e) => {
             e.preventDefault();
+
+            const recaptchaResponse = grecaptcha.getResponse();
+            if (!recaptchaResponse) {
+                alert('Please complete the CAPTCHA');
+                return;
+            }
+
             try {
+                await verifyCaptcha(recaptchaResponse);
+
                 const result = await signInWithPopup(auth, provider);
                 console.log('User signed up with Google:', result.user);
-                
                 alert("Account created successfully! You can now log in.");
                 window.location.href = "auth.html?mode=login";
             } catch (error) {
@@ -98,10 +116,19 @@ document.addEventListener("DOMContentLoaded", () => {
                 alert('Google sign-up failed: ' + error.message);
             }
         };
-        
+
         const googleLoginButtonPressed = async (e) => {
             e.preventDefault();
+
+            const recaptchaResponse = grecaptcha.getResponse();
+            if (!recaptchaResponse) {
+                alert('Please complete the CAPTCHA');
+                return;
+            }
+
             try {
+                await verifyCaptcha(recaptchaResponse);
+
                 const result = await signInWithPopup(auth, provider);
                 const user = result.user;
                 console.log('User logged in with Google:', user);
