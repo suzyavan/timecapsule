@@ -40,10 +40,12 @@ document.addEventListener("DOMContentLoaded", () => {
             e.preventDefault();
         
             const recaptchaResponse = grecaptcha.getResponse();
+            console.log('reCAPTCHA Response:', recaptchaResponse);
             if (!recaptchaResponse) {
                 alert("Please complete the reCAPTCHA.");
                 return;
             }
+            
         
             try {
                 const userCredential = await createUserWithEmailAndPassword(auth, signupEmail.value, signupPassword.value);
@@ -62,10 +64,12 @@ document.addEventListener("DOMContentLoaded", () => {
             e.preventDefault();
         
             const recaptchaResponse = grecaptcha.getResponse();
+            console.log('reCAPTCHA Response:', recaptchaResponse);
             if (!recaptchaResponse) {
                 alert("Please complete the reCAPTCHA.");
                 return;
             }
+            
         
             try {
                 const userCredential = await signInWithEmailAndPassword(auth, email.value, password.value);
