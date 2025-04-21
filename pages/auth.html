@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <title>Authentication - Virtual Time Capsule</title>
     <link href="../css/styles.css" type="text/css" rel="stylesheet">
+    <script src="https://www.google.com/recaptcha/api.js" async defer></script>
 </head>
 <body>
     <div id="navbar">
@@ -15,10 +16,12 @@
         <form id="loginForm">
             <label for="email">Email:</label>
             <input type="email" id="email" required>
-            
+
             <label for="password">Password:</label>
             <input type="password" id="password" required>
-            
+
+            <div class="g-recaptcha" data-sitekey="6LfPIh8rAAAAAJ_5tmWiwEjW2DYbYuNtqUa6goQM"></div>
+
             <button type="submit" id="login-btn">Log In</button>
         </form>
         <br>
@@ -34,10 +37,12 @@
         <form id="signupForm">
             <label for="email">Email:</label>
             <input type="email" id="signupEmail" required>
-            
+
             <label for="password">Password:</label>
             <input type="password" id="signupPassword" required>
-            
+
+            <div class="g-recaptcha" data-sitekey="6LfPIh8rAAAAAJ_5tmWiwEjW2DYbYuNtqUa6goQM"></div>
+
             <button type="submit" id="signup-btn">Sign Up</button>
         </form>
         <br>

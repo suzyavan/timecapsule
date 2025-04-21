@@ -8,12 +8,14 @@
 </head>
 <body>
     
-    <div class="user-status">
+    <nav class="navbar">
         <a href="../index.html" class="button">Home</a>
-        <p id="loginStatus">Checking login status...</p>
-        <button id="signOutButton">Sign Out</button>
-    </div>
-    
+        <div class="navbar-title">Virtual Time Capsule</div>
+        <div id="userInfo">
+            <p id="loginStatus">Checking login status...</p>
+            <button id="signOutButton" class="button">Sign Out</button>
+        </div>
+    </nav>
 
     <div class="container">
         <h1>Create Your Time Capsule</h1>
@@ -30,7 +32,7 @@
             <label for="imageUpload">Upload Image (optional): <br> PNG, JPG, JPEG only.</label>
             <input type="file" id="imageUpload" accept="image/png, image/jpeg, image/jpg">
         
-            <progress id="progressBar" value="0" max="100" style="display: none; width: 100%;"></progress>
+            <progress id="progressBar" value="0" max="100" style="display: none;"></progress>
         
             <button type="submit">Save Capsule</button>
         </form>

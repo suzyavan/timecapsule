@@ -138,7 +138,7 @@ document.addEventListener("DOMContentLoaded", () => {
             openButton.addEventListener("click", () => {
                 listItem.innerHTML += ` 
                     <p>Message: ${capsule.message}</p>
-                    ${capsule.imageUrl ? `<img src="${capsule.imageUrl}" alt="Capsule Image" style="max-width: 100px; display: block;">` : ""}
+                    ${capsule.imageUrl ? `<img src="${capsule.imageUrl}" alt="Capsule Image" class="centered-image">` : ""}
                 `;
             });
         }

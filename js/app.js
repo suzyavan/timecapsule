@@ -38,29 +38,48 @@ document.addEventListener("DOMContentLoaded", () => {
 
         const signUpButtonPressed = async (e) => {
             e.preventDefault();
+        
+            const recaptchaResponse = grecaptcha.getResponse();
+            if (!recaptchaResponse) {
+                alert("Please complete the reCAPTCHA.");
+                return;
+            }
+        
             try {
                 const userCredential = await createUserWithEmailAndPassword(auth, signupEmail.value, signupPassword.value);
                 console.log('User signed up:', userCredential.user);
                 alert("Account created successfully! You can now log in.");
+                grecaptcha.reset(); 
                 window.location.href = "auth.html?mode=login";
             } catch (error) {
                 console.log('Error:', error.code, error.message);
                 alert('Sign-up failed: ' + error.message);
+                grecaptcha.reset(); 
             }
         };
-
+        
         const loginButtonPressed = async (e) => {
             e.preventDefault();
+        
+            const recaptchaResponse = grecaptcha.getResponse();
+            if (!recaptchaResponse) {
+                alert("Please complete the reCAPTCHA.");
+                return;
+            }
+        
             try {
                 const userCredential = await signInWithEmailAndPassword(auth, email.value, password.value);
                 console.log('User logged in:', userCredential.user);
-                localStorage.setItem("loggedInViaLoginForm", "true"); // Set flag for login
+                localStorage.setItem("loggedInViaLoginForm", "true");
+                grecaptcha.reset();
                 window.location.href = '../index.html';
             } catch (error) {
                 console.log('Error:', error.code, error.message);
                 alert('Login failed: ' + error.message);
+                grecaptcha.reset();
             }
         };
+        
 
         const googleSignUpButtonPressed = async (e) => {
             e.preventDefault();
@@ -68,7 +87,7 @@ document.addEventListener("DOMContentLoaded", () => {
                 const result = await signInWithPopup(auth, provider);
                 console.log('User signed up with Google:', result.user);
                 
-                alert("Sign-up successful with Google! You can now log in.");
+                alert("Account created successfully! You can now log in.");
                 window.location.href = "auth.html?mode=login";
             } catch (error) {
                 console.log('Error:', error.code, error.message);
@@ -76,7 +95,6 @@ document.addEventListener("DOMContentLoaded", () => {
             }
         };
         
-
         const googleLoginButtonPressed = async (e) => {
             e.preventDefault();
             try {
