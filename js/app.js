@@ -1,4 +1,4 @@
-import { auth } from '../js/firebase.js'; 
+import { auth } from '../js/firebase.js';
 import {
     createUserWithEmailAndPassword,
     signInWithEmailAndPassword,
@@ -36,41 +36,9 @@ document.addEventListener("DOMContentLoaded", () => {
         const forgotPasswordEmail = document.getElementById("forgotPasswordEmail");
         const provider = new GoogleAuthProvider();
 
-        // Function to verify reCAPTCHA with server-side validation
-        const verifyCaptcha = async (recaptchaResponse) => {
-            try {
-                const response = await fetch('/verify-recaptcha', {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                    },
-                    body: JSON.stringify({ recaptchaResponse }) // Send the response to the server
-                });
-
-                const data = await response.json();
-                if (data.error) {
-                    throw new Error('reCAPTCHA validation failed');
-                }
-            } catch (error) {
-                console.error('Error during reCAPTCHA verification:', error);
-                alert('Error during reCAPTCHA verification');
-                throw error; // Throw the error to stop further execution
-            }
-        };
-
         const signUpButtonPressed = async (e) => {
             e.preventDefault();
-
-            const recaptchaResponse = grecaptcha.getResponse();
-            if (!recaptchaResponse) {
-                alert('Please complete the CAPTCHA');
-                return;
-            }
-
             try {
-                // Verify reCAPTCHA before proceeding with Firebase authentication
-                await verifyCaptcha(recaptchaResponse);
-
                 const userCredential = await createUserWithEmailAndPassword(auth, signupEmail.value, signupPassword.value);
                 console.log('User signed up:', userCredential.user);
                 alert("Account created successfully! You can now log in.");
@@ -83,20 +51,10 @@ document.addEventListener("DOMContentLoaded", () => {
 
         const loginButtonPressed = async (e) => {
             e.preventDefault();
-
-            const recaptchaResponse = grecaptcha.getResponse();
-            if (!recaptchaResponse) {
-                alert('Please complete the CAPTCHA');
-                return;
-            }
-
             try {
-                // Verify reCAPTCHA before proceeding with Firebase authentication
-                await verifyCaptcha(recaptchaResponse);
-
                 const userCredential = await signInWithEmailAndPassword(auth, email.value, password.value);
                 console.log('User logged in:', userCredential.user);
-                localStorage.setItem("loggedInViaLoginForm", "true");
+                localStorage.setItem("loggedInViaLoginForm", "true"); // Set flag for login
                 window.location.href = '../index.html';
             } catch (error) {
                 console.log('Error:', error.code, error.message);
@@ -106,44 +64,26 @@ document.addEventListener("DOMContentLoaded", () => {
 
         const googleSignUpButtonPressed = async (e) => {
             e.preventDefault();
-
-            const recaptchaResponse = grecaptcha.getResponse();
-            if (!recaptchaResponse) {
-                alert('Please complete the CAPTCHA');
-                return;
-            }
-
             try {
-                // Verify reCAPTCHA before proceeding with Google authentication
-                await verifyCaptcha(recaptchaResponse);
-
                 const result = await signInWithPopup(auth, provider);
                 console.log('User signed up with Google:', result.user);
-                alert("Account created successfully! You can now log in.");
+                
+                alert("Sign-up successful with Google! You can now log in.");
                 window.location.href = "auth.html?mode=login";
             } catch (error) {
                 console.log('Error:', error.code, error.message);
                 alert('Google sign-up failed: ' + error.message);
             }
         };
+        
 
         const googleLoginButtonPressed = async (e) => {
             e.preventDefault();
-
-            const recaptchaResponse = grecaptcha.getResponse();
-            if (!recaptchaResponse) {
-                alert('Please complete the CAPTCHA');
-                return;
-            }
-
             try {
-                // Verify reCAPTCHA before proceeding with Google authentication
-                await verifyCaptcha(recaptchaResponse);
-
                 const result = await signInWithPopup(auth, provider);
                 const user = result.user;
                 console.log('User logged in with Google:', user);
-                localStorage.setItem("loggedInViaLoginForm", "true");
+                localStorage.setItem("loggedInViaLoginForm", "true"); 
                 window.location.href = '../index.html';
             } catch (error) {
                 console.log('Error:', error.code, error.message);
@@ -224,7 +164,7 @@ document.addEventListener("DOMContentLoaded", () => {
         signOutBtn.addEventListener("click", async () => {
             try {
                 await signOut(auth);
-                localStorage.removeItem("loggedInViaLoginForm"); 
+                localStorage.removeItem("loggedInViaLoginForm"); // Remove flag
                 window.location.reload(); 
             } catch (error) {
                 console.error("Error signing out:", error);
