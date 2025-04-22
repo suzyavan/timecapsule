@@ -54,7 +54,7 @@ document.addEventListener("DOMContentLoaded", () => {
             try {
                 const userCredential = await signInWithEmailAndPassword(auth, email.value, password.value);
                 console.log('User logged in:', userCredential.user);
-                localStorage.setItem("loggedInViaLoginForm", "true"); // Set flag for login
+                localStorage.setItem("loggedInViaLoginForm", "true"); 
                 window.location.href = '../index.html';
             } catch (error) {
                 console.log('Error:', error.code, error.message);
@@ -164,7 +164,7 @@ document.addEventListener("DOMContentLoaded", () => {
         signOutBtn.addEventListener("click", async () => {
             try {
                 await signOut(auth);
-                localStorage.removeItem("loggedInViaLoginForm"); // Remove flag
+                localStorage.removeItem("loggedInViaLoginForm"); 
                 window.location.reload(); 
             } catch (error) {
                 console.error("Error signing out:", error);
