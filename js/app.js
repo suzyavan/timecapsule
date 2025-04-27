@@ -1,13 +1,5 @@
 import { auth } from '../js/firebase.js';
-import {
-    createUserWithEmailAndPassword,
-    signInWithEmailAndPassword,
-    signInWithPopup,
-    GoogleAuthProvider,
-    sendPasswordResetEmail,
-    signOut,
-    onAuthStateChanged
-} from "https://www.gstatic.com/firebasejs/11.0.2/firebase-auth.js";
+import {createUserWithEmailAndPassword,signInWithEmailAndPassword,signInWithPopup,GoogleAuthProvider,sendPasswordResetEmail, signOut,onAuthStateChanged} from "https://www.gstatic.com/firebasejs/11.0.2/firebase-auth.js";
 
 document.addEventListener("DOMContentLoaded", () => {
     const loginSection = document.getElementById("loginSection");
@@ -38,12 +30,11 @@ document.addEventListener("DOMContentLoaded", () => {
         const humanCheck = document.getElementById("humanCheck");
         const checkboxError = document.getElementById("checkboxError");
 
-        // Enable login button only if checkbox is checked
         if (humanCheck && loginBtn) {
             humanCheck.addEventListener("change", () => {
                 loginBtn.disabled = !humanCheck.checked;
                 if (checkboxError) {
-                    checkboxError.style.display = "none"; // Hide error on checkbox change
+                    checkboxError.style.display = "none"; 
                 }
             });
         }
@@ -63,8 +54,6 @@ document.addEventListener("DOMContentLoaded", () => {
 
         const loginButtonPressed = async (e) => {
             e.preventDefault();
-
-            // Check if checkbox is checked
             if (!humanCheck.checked) {
                 if (checkboxError) checkboxError.style.display = "block";
                 return;
