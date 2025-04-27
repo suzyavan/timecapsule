@@ -50,7 +50,17 @@ body {
   right: 30px;
 }
     
+.error-message {
+  color: red;
+  display: none;
+  margin: 5px 0 0 0;
+}
 
+.human-check-container {
+  display: flex;
+  gap: 6px;
+  margin-top: 10px;
+}
 
 #signOutBtn {
   margin: 0;

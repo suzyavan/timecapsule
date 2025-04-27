@@ -35,6 +35,18 @@ document.addEventListener("DOMContentLoaded", () => {
         const forgotPasswordForm = document.getElementById("forgotPasswordForm");
         const forgotPasswordEmail = document.getElementById("forgotPasswordEmail");
         const provider = new GoogleAuthProvider();
+        const humanCheck = document.getElementById("humanCheck");
+        const checkboxError = document.getElementById("checkboxError");
+
+        // Enable login button only if checkbox is checked
+        if (humanCheck && loginBtn) {
+            humanCheck.addEventListener("change", () => {
+                loginBtn.disabled = !humanCheck.checked;
+                if (checkboxError) {
+                    checkboxError.style.display = "none"; // Hide error on checkbox change
+                }
+            });
+        }
 
         const signUpButtonPressed = async (e) => {
             e.preventDefault();
@@ -51,10 +63,19 @@ document.addEventListener("DOMContentLoaded", () => {
 
         const loginButtonPressed = async (e) => {
             e.preventDefault();
+
+            // Check if checkbox is checked
+            if (!humanCheck.checked) {
+                if (checkboxError) checkboxError.style.display = "block";
+                return;
+            } else {
+                if (checkboxError) checkboxError.style.display = "none";
+            }
+
             try {
                 const userCredential = await signInWithEmailAndPassword(auth, email.value, password.value);
                 console.log('User logged in:', userCredential.user);
-                localStorage.setItem("loggedInViaLoginForm", "true"); 
+                localStorage.setItem("loggedInViaLoginForm", "true");
                 window.location.href = '../index.html';
             } catch (error) {
                 console.log('Error:', error.code, error.message);
@@ -67,7 +88,6 @@ document.addEventListener("DOMContentLoaded", () => {
             try {
                 const result = await signInWithPopup(auth, provider);
                 console.log('User signed up with Google:', result.user);
-                
                 alert("Sign-up successful with Google! You can now log in.");
                 window.location.href = "auth.html?mode=login";
             } catch (error) {
@@ -75,7 +95,6 @@ document.addEventListener("DOMContentLoaded", () => {
                 alert('Google sign-up failed: ' + error.message);
             }
         };
-        
 
         const googleLoginButtonPressed = async (e) => {
             e.preventDefault();
@@ -83,7 +102,7 @@ document.addEventListener("DOMContentLoaded", () => {
                 const result = await signInWithPopup(auth, provider);
                 const user = result.user;
                 console.log('User logged in with Google:', user);
-                localStorage.setItem("loggedInViaLoginForm", "true"); 
+                localStorage.setItem("loggedInViaLoginForm", "true");
                 window.location.href = '../index.html';
             } catch (error) {
                 console.log('Error:', error.code, error.message);
@@ -109,23 +128,23 @@ document.addEventListener("DOMContentLoaded", () => {
         };
 
         const switchToSignup = () => {
-            document.getElementById("loginSection").style.display = "none";
-            document.getElementById("signupSection").style.display = "block";
+            loginSection.style.display = "none";
+            signupSection.style.display = "block";
         };
 
         const switchToLogin = () => {
-            document.getElementById("signupSection").style.display = "none";
-            document.getElementById("loginSection").style.display = "block";
+            signupSection.style.display = "none";
+            loginSection.style.display = "block";
         };
 
         const switchToForgotPassword = () => {
-            document.getElementById("loginSection").style.display = "none";
+            loginSection.style.display = "none";
             document.getElementById("forgotPasswordSection").style.display = "block";
         };
 
         const switchToLoginFromForgot = () => {
             document.getElementById("forgotPasswordSection").style.display = "none";
-            document.getElementById("loginSection").style.display = "block";
+            loginSection.style.display = "block";
         };
 
         if (signUpBtn) signUpBtn.addEventListener("click", signUpButtonPressed);
@@ -148,7 +167,6 @@ document.addEventListener("DOMContentLoaded", () => {
     if (authButtons && signOutBtn) {
         onAuthStateChanged(auth, (user) => {
             const cameFromLogin = localStorage.getItem("loggedInViaLoginForm") === "true";
-
             if (user && cameFromLogin) {
                 authButtons.style.display = "none";
                 userInfo.style.display = "inline-block";
@@ -164,8 +182,8 @@ document.addEventListener("DOMContentLoaded", () => {
         signOutBtn.addEventListener("click", async () => {
             try {
                 await signOut(auth);
-                localStorage.removeItem("loggedInViaLoginForm"); 
-                window.location.reload(); 
+                localStorage.removeItem("loggedInViaLoginForm");
+                window.location.reload();
             } catch (error) {
                 console.error("Error signing out:", error);
             }
