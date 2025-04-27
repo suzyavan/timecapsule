@@ -15,15 +15,15 @@ body {
 
 #navbar {
   background: #003366;
-  padding: 20px 30px; /* Padding for vertical space */
-  display: flex; /* Flexbox layout */
-  justify-content: space-between; /* Space between items, Home to the left */
-  align-items: center; /* Center content vertically */
-  min-height: 100px; /* Ensure the navbar is vertically wide */
+  padding: 20px 30px; 
+  display: flex; 
+  justify-content: space-between; 
+  align-items: center; 
+  min-height: 100px; 
 }
 
 #homeButton {
-  background: #0073e6;  /* Blue color for Home button */
+  background: #0073e6;  
   color: white;
   padding: 12px 24px;
   font-size: 1em;
@@ -33,7 +33,7 @@ body {
 }
 
 #homeButton:hover {
-  background: #005bb5;  /* Darker blue on hover */
+  background: #005bb5;  
 }
 
 .navbar {
@@ -53,7 +53,6 @@ body {
   text-align: center;
   flex-grow: 1;
 }
-
 
 #userInfo {
   position: absolute;
@@ -178,7 +177,6 @@ section p {
   color: #444;
 }
 
-
 form {
   max-width: 400px;
   margin: 30px auto;
@@ -249,7 +247,6 @@ a:hover {
   text-decoration: underline;
 }
 
-
 @media screen and (max-width: 600px) {
   .navbar {
     flex-direction: column;
@@ -277,8 +274,8 @@ a:hover {
   padding: 40px 20px;
   background: white;
   margin: 20px auto;
-  max-width: 1000px;  /* Increase max-width for a wider container */
-  width: 90%;          /* Make sure it's responsive */
+  max-width: 1000px;  
+  width: 90%;         
   border-radius: 10px;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.05);
 }
@@ -291,7 +288,6 @@ a:hover {
   box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
 }
 
-
 .faq-item h2 {
   font-size: 1.4em;
   color: #003366;
@@ -303,7 +299,6 @@ a:hover {
   color: #555;
   line-height: 1.6;
 }
-
 
 #faq h1 {
   color: #003366;
