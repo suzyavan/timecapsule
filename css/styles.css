@@ -320,3 +320,17 @@ a:hover {
   font-size: 1.2em;
   margin-bottom: 30px;
 }
+
+@media screen and (max-width: 600px) {
+  .navbar {
+    flex-direction: column;
+    text-align: center;
+  }
+  .left-space,
+  .navbar-title,
+  .auth-buttons {
+    flex: none;
+    width: 100%;
+    margin: 5px 0;
+  }
+}
