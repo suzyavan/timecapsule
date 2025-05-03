@@ -123,8 +123,14 @@ body {
 
 .human-check-container {
   display: flex;
+  align-items: center;
   gap: 6px;
   margin-top: 10px;
+}
+
+.human-check-container label{
+  display: inline-block;
+  margin: 0;
 }
 
 #loginSection h1,
