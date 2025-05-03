@@ -19,6 +19,7 @@ body {
   display: flex; 
   justify-content: space-between; 
   align-items: center; 
+  flex-wrap: wrap;
   min-height: 100px; 
 }
 
@@ -38,8 +39,9 @@ body {
 
 .navbar {
   display: flex;
-  justify-content: center;
+  justify-content: space-between;
   align-items: center;
+  flex-wrap: wrap;
   background: #003366;
   color: white;
   padding: 20px 30px;
@@ -52,6 +54,10 @@ body {
   font-weight: bold;
   text-align: center;
   flex-grow: 1;
+}
+
+.left-space{
+  flex: 1;
 }
 
 #userInfo {
@@ -71,6 +77,9 @@ body {
 .auth-buttons {
   position: absolute;
   right: 30px;
+  display: flex;
+  flex: 1;
+  justify-content: flex-end;
 }
     
 .error-message {
