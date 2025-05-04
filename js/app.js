@@ -1,5 +1,5 @@
 import { auth } from '../js/firebase.js';
-import {createUserWithEmailAndPassword,signInWithEmailAndPassword,signInWithPopup,GoogleAuthProvider,sendPasswordResetEmail, signOut,onAuthStateChanged} from "https://www.gstatic.com/firebasejs/11.0.2/firebase-auth.js";
+import {createUserWithEmailAndPassword,signInWithEmailAndPassword,signInWithPopup,GoogleAuthProvider,sendPasswordResetEmail, signOut,onAuthStateChanged, sendEmailVerification} from "https://www.gstatic.com/firebasejs/11.0.2/firebase-auth.js";
 
 document.addEventListener("DOMContentLoaded", () => {
     const loginSection = document.getElementById("loginSection");
@@ -43,14 +43,19 @@ document.addEventListener("DOMContentLoaded", () => {
             e.preventDefault();
             try {
                 const userCredential = await createUserWithEmailAndPassword(auth, signupEmail.value, signupPassword.value);
-                console.log('User signed up:', userCredential.user);
-                alert("Account created successfully! You can now log in.");
+                const user = userCredential.user;
+        
+                await sendEmailVerification(user);
+                console.log('Verification email sent to:', user.email);
+        
+                alert("Account created! A verification link has been sent to your email. Please verify before logging in.");
                 window.location.href = "auth.html?mode=login";
             } catch (error) {
                 console.log('Error:', error.code, error.message);
                 alert('Sign-up failed: ' + error.message);
             }
         };
+        
 
         const loginButtonPressed = async (e) => {
             e.preventDefault();
@@ -60,10 +65,18 @@ document.addEventListener("DOMContentLoaded", () => {
             } else {
                 if (checkboxError) checkboxError.style.display = "none";
             }
-
+        
             try {
                 const userCredential = await signInWithEmailAndPassword(auth, email.value, password.value);
-                console.log('User logged in:', userCredential.user);
+                const user = userCredential.user;
+        
+                if (!user.emailVerified) {
+                    alert("Please verify your email before logging in. Check your inbox or spam folder.");
+                    await signOut(auth);
+                    return;
+                }
+        
+                console.log('User logged in:', user);
                 localStorage.setItem("loggedInViaLoginForm", "true");
                 window.location.href = '../index.html';
             } catch (error) {
@@ -71,6 +84,7 @@ document.addEventListener("DOMContentLoaded", () => {
                 alert('Login failed: ' + error.message);
             }
         };
+        
 
         const googleSignUpButtonPressed = async (e) => {
             e.preventDefault();
