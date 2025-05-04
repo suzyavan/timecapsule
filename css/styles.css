@@ -13,16 +13,16 @@ body {
   min-height: 100vh;
 }
 
+/* NAVIGATION PANE */
+
 #navbar {
   background: #003366;
   padding: 20px 30px; 
-  display: flex; 
-  justify-content: space-between; 
-  align-items: center; 
   min-height: 100px; 
 }
 
 #homeButton {
+  justify-self: start;
   background: #0073e6;  
   color: white;
   padding: 12px 24px;
@@ -38,51 +38,32 @@ body {
 
 .navbar {
   display: flex;
-  justify-content: center;
+  justify-content: space-between;
   align-items: center;
   background: #003366;
   color: white;
   padding: 20px 30px;
   position: relative;
-  min-height: 100px;
+  width: 100%;
 }
 
 .navbar-title {
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
   font-size: 1.5em;
   font-weight: bold;
-  text-align: center;
-  flex-grow: 1;
+  white-space: nowrap;
 }
 
-#userInfo {
-  position: absolute;
-  right: 30px;
-  top: 50%;
-  transform: translateY(-50%);
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  gap: 0;
-  max-height: 100%;
-  text-align: center;
-}
+/* .left-space{
+  flex: 1;
+} LEGACY */
 
 .auth-buttons {
-  position: absolute;
-  right: 30px;
-}
-    
-.error-message {
-  color: red;
-  display: none;
-  margin: 5px 0 0 0;
-}
-
-.human-check-container {
+  justify-self: end;
   display: flex;
-  gap: 6px;
-  margin-top: 10px;
+  gap: 10px;
 }
 
 #signOutBtn {
@@ -109,6 +90,47 @@ body {
 .auth-buttons a:hover,
 #signOutBtn:hover {
   background: #004080;
+}
+
+#homeButton,
+.auth-buttons {
+  flex: 0 0 auto;
+  display: flex;
+  gap: 10px;
+}
+
+/**/
+
+#userInfo {
+  position: absolute;
+  right: 30px;
+  top: 50%;
+  transform: translateY(-50%);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 0;
+  max-height: 100%;
+  text-align: center;
+}
+    
+.error-message {
+  color: red;
+  display: none;
+  margin: 5px 0 0 0;
+}
+
+.human-check-container {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  margin-top: 10px;
+}
+
+.human-check-container label{
+  display: inline-block;
+  margin: 0;
 }
 
 #loginSection h1,
@@ -252,13 +274,12 @@ a:hover {
     flex-direction: column;
     text-align: center;
   }
-
+  .left-space,
+  .navbar-title,
   .auth-buttons {
-    margin-top: 10px;
-  }
-
-  form {
-    margin: 20px 10px;
+    flex: none;
+    width: 100%;
+    margin: 5px 0;
   }
 }
 
